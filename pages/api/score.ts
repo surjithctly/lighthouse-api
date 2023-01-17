@@ -24,10 +24,12 @@ type Data = {
 //   res: NextApiResponse<Data>
 // ) {
 
-export default async function handler(req) {
+export default async function handler(req: NextApiRequest) {
   console.log(req);
 
   // res.status(200).json({ score: req });
+
+  // const thenga = req;
 
   return new Response(JSON.stringify(req));
 
