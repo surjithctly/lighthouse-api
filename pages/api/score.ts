@@ -1,55 +1,24 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
   runtime: "edge",
 };
 
-// interface CustomAPIRequest extends NextApiRequest {
-//   query: {
-//     url: string;
-//   };
-// }
-
-type Data = {
-  message?: string;
-  error?: boolean;
-  success?: boolean;
-  url?: string;
-  score?: object;
+const isUrl = (url: string) => {
+  try {
+    return Boolean(new URL(url));
+  } catch (e) {
+    return false;
+  }
 };
 
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse<Data>
-// ) {
-
-export default async function handler(req: NextApiRequest) {
-  console.log(req);
-
-  // res.status(200).json({ score: req });
-
-  // const thenga = req;
-
-  return new Response(JSON.stringify(req));
-
-  return new Response(
-    JSON.stringify({
-      score: req,
-    })
-    // {
-    //   status: 200,
-    //   headers: {
-    //     'content-type': 'application/json',
-    //     'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
-    //   },
-    // }
-  );
-
-  // const url = req.query.url;
-
-  if (!url) {
-    res.status(400).json({ error: true, message: "Please add a valid URL" });
+export default async function handler(req: NextRequest) {
+  const url = req.nextUrl.searchParams.get("url");
+  if (!url || !isUrl(url)) {
+    return new Response(
+      JSON.stringify({ error: true, message: "Please add a valid URL" }),
+      { status: 400 }
+    );
   }
 
   const params = new URLSearchParams();
@@ -74,12 +43,29 @@ export default async function handler(req: NextApiRequest) {
     );
     const data = await response.json();
 
-    res.setHeader(
-      "Cache-Control",
-      "public, s-maxage=86400, stale-while-revalidate=43200"
+    return new Response(
+      JSON.stringify({
+        success: true,
+        url: url,
+        lighthouse: data.lighthouseResult.categories,
+      }),
+      {
+        status: 200,
+        headers: {
+          "content-type": "application/json",
+          "cache-control":
+            "public, s-maxage=86400, stale-while-revalidate=43200",
+        },
+      }
     );
-    res.status(200).json({ success: true, url: url, score: data });
   } catch (error) {
-    res.status(400).json({ error: true, message: error as string });
+    return new Response(
+      JSON.stringify({
+        error: true,
+        message: "Something went Wrong",
+        desc: error,
+      }),
+      { status: 400 }
+    );
   }
 }
