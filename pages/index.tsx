@@ -32,7 +32,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer">
               <pre className="bg-gray-100 px-5 py-2 rounded-md">
-                https://lighthouse-api.vercel.app/api/score?url=
+                GET https://lighthouse-api.vercel.app/api/score?url=
                 <strong>https://yourwebsiteurl.com/</strong>
               </pre>
             </a>
