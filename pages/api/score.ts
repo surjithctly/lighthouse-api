@@ -13,7 +13,17 @@ const isUrl = (url: string) => {
 };
 
 export default async function handler(req: NextRequest) {
+  if (req.method !== "GET") {
+    return new Response(
+      JSON.stringify({ error: true, message: "Please use GET Method" }),
+      { status: 400 }
+    );
+  }
+
   const url = req.nextUrl.searchParams.get("url");
+  // cache for 24 hours. stale for 12 hours.
+  let cacheControl = "public, s-maxage=86400, stale-while-revalidate=43200";
+
   if (!url || !isUrl(url)) {
     return new Response(
       JSON.stringify({ error: true, message: "Please add a valid URL" }),
@@ -53,8 +63,7 @@ export default async function handler(req: NextRequest) {
         status: 200,
         headers: {
           "content-type": "application/json",
-          "cache-control":
-            "public, s-maxage=86400, stale-while-revalidate=43200",
+          "cache-control": cacheControl,
         },
       }
     );
