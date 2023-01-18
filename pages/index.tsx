@@ -26,12 +26,12 @@ export default function Home() {
           <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900">
             Lighthouse Pagespeed API with Vercel Edge
           </h1>
-          <div className="max-w-screen-lg my-12 mx-auto">
+          <div className="w-full  max-w-max mt-12 mb-8 mx-auto">
             <a
               href="https://lighthouse-api.vercel.app/api/score?url=https://lighthouse-api.vercel.app/"
               target="_blank"
               rel="noopener noreferrer">
-              <pre className="bg-gray-100 px-5 py-2 rounded-md">
+              <pre className="bg-gray-100 px-5 py-2 rounded-md overflow-auto ">
                 GET https://lighthouse-api.vercel.app/api/score?url=
                 <strong>https://yourwebsiteurl.com/</strong>
               </pre>
@@ -45,6 +45,17 @@ export default function Home() {
             {/* <Github /> */}
             <p>Star on GitHub</p>
           </a>
+
+          <div className="mt-5 mx-auto max-w-lg">
+            <h2 className="text-xl font-bold">Options</h2>
+            <div className=" border p-5 mt-4 text-start">
+              <h3 className="font-bold ">Cache:</h3>
+              <p className="text-gray-700 mt-2 ">
+                Add <code className="text-pink-500">&_vercel_no_cache=1</code>{" "}
+                to the request URL to burst cache and request fresh data.
+              </p>
+            </div>
+          </div>
 
           {/* <div className="flex mt-10 items-center space-x-3">
 
