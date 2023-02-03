@@ -57,6 +57,7 @@ export default async function handler(req: NextRequest) {
       JSON.stringify({
         success: true,
         url: url,
+        datetime: new Date().toISOString(),
         lighthouse: data.lighthouseResult.categories,
       }),
       {
